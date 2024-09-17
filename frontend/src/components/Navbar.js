@@ -5,7 +5,7 @@ import { Navbar as BootstrapNavbar, Nav, NavDropdown, Container } from 'react-bo
 
 function Navbar() {
   return (
-    <BootstrapNavbar bg="light" expand="lg">
+    <BootstrapNavbar bg="light shadow" expand="lg">
       <Container>
         <BootstrapNavbar.Brand as={Link} to="/">CRUD</BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />

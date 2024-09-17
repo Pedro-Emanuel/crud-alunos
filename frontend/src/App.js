@@ -21,7 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/gerenciar" element={<AlunoList {...alunosHook} />} />
-            <Route path="/adicionar" element={<AdicionarAluno />} />
+            <Route path="/adicionar" element={<AdicionarAluno {...alunosHook} />} />
           </Routes>
         </Container>
         <Footer />

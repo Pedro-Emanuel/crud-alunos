@@ -26,7 +26,15 @@ function AlunoList({
 
   return (
     <>
+      <h5 className='mb-2'>Gerencie os alunos</h5>
+      <h6 className='mb-4 text-secondary'>~ Clique em uma linha para mais opções</h6>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Pagination 
+        alunosPerPage={alunosPorPagina}
+        totalAlunos={filteredAlunos.length}
+        paginate={setCurrentPage}
+        currentPage={currentPage}
+      />
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -45,12 +53,6 @@ function AlunoList({
           ))}
         </tbody>
       </Table>
-      <Pagination 
-        alunosPerPage={alunosPorPagina}
-        totalAlunos={filteredAlunos.length}
-        paginate={setCurrentPage}
-        currentPage={currentPage}
-      />
       <AlunoForm 
         show={showModal}
         aluno={selectedAluno}

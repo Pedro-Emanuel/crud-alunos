@@ -15,7 +15,7 @@ function Pagination({ alunosPerPage, totalAlunos, paginate, currentPage }) {
         <Button
           key={number}
           onClick={() => paginate(number)}
-          className={`mx-1 ${currentPage === number ? 'btn-primary' : 'btn-outline-primary'}`}
+          className={`mb-3 mx-1 ${currentPage === number ? 'btn-primary' : 'btn-secondary'}`}
         >
           {number}
         </Button>

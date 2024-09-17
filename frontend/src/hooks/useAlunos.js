@@ -58,6 +58,15 @@ function useAlunos() {
     }
   };
 
+  const handleCreateAluno = async () => {
+    try {
+      const updatedAlunos = await fetchAlunos();
+      setAlunos(updatedAlunos);
+    } catch (error) {
+      console.error('Erro ao criar aluno:', error);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSelectedAluno({ ...selectedAluno, [name]: value });
@@ -75,7 +84,8 @@ function useAlunos() {
     handleCloseModal,
     handleSaveAluno,
     handleDeleteAluno,
-    handleInputChange
+    handleInputChange,
+    handleCreateAluno
   };
 }
 

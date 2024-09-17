@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { adicionarAluno } from '../services/alunoService';
 
-function AdicionarAluno() {
+function AdicionarAluno({handleCreateAluno}) {
   const [aluno, setAluno] = useState({ nome: '', ira: '', curso: '' });
   const [showAlert, setShowAlert] = useState(false);
   const [alertVariant, setAlertVariant] = useState('success');
@@ -18,6 +18,7 @@ function AdicionarAluno() {
     e.preventDefault();
     try {
       await adicionarAluno(aluno);
+      handleCreateAluno();
       setAlertVariant('success');
       setAlertMessage('Aluno adicionado com sucesso!');
       setShowAlert(true);
@@ -33,7 +34,7 @@ function AdicionarAluno() {
 
   return (
     <div>
-      <h2>Adicionar Novo Aluno</h2>
+      <h5 className='mb-4'>Adicione um novo aluno</h5>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Nome</Form.Label>
