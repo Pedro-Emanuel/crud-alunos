@@ -3,6 +3,7 @@ import { Table, Form } from 'react-bootstrap';
 import AlunoForm from './AlunoForm';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import { useEffect } from 'react';
 
 function AlunoList({
   filteredAlunos,
@@ -21,6 +22,8 @@ function AlunoList({
   const [sortField, setSortField] = useState('nome');
   const [sortDirection, setSortDirection] = useState('asc');
   const [showColors, setShowColors] = useState(false);
+  const [totalAverage, setTotalAverage] = useState(0.0);
+  const [pageAverage, setPageAverage] = useState(0.0);
 
   const handleSort = (field) => {
     if (field === sortField) {
@@ -40,6 +43,28 @@ function AlunoList({
   const indexOfLastAluno = currentPage * alunosPorPagina;
   const indexOfFirstAluno = indexOfLastAluno - alunosPorPagina;
   const currentAlunos = sortedAlunos.slice(indexOfFirstAluno, indexOfLastAluno);
+
+  useEffect(() => {
+    const calculateAverage = () => {
+      if (filteredAlunos.length === 0) return 0;
+      
+      const total = filteredAlunos.reduce((sum, aluno) => sum + Number(aluno.ira), 0);
+      return (total / filteredAlunos.length).toFixed(2);
+    };
+
+    setTotalAverage(calculateAverage());
+  }, [filteredAlunos]);
+
+  useEffect(() => {
+    const calculateAverage = () => {
+      if (currentAlunos.length === 0) return 0;
+      
+      const total = currentAlunos.reduce((sum, aluno) => sum + Number(aluno.ira), 0);
+      return (total / currentAlunos.length).toFixed(2);
+    };
+
+    setPageAverage(calculateAverage());
+  } , [currentAlunos]);
 
   const getSortIcon = (field) => {
     if (field === sortField) {
@@ -97,7 +122,6 @@ function AlunoList({
               <tr
                 className={showColors ? (
                   aluno.ira >= 7 ? 'table-success'
-                  : aluno.ira >= 4 ? 'table-warning'
                   : 'table-danger'
                 ) : ''}
                 key={aluno.id}
@@ -109,6 +133,14 @@ function AlunoList({
                 <td style={columnStyles.curso}>{aluno.curso}</td>
               </tr>
             ))}
+            <tr className='table-dark'>
+              <td className="text-center">
+                IRA médio da página: {pageAverage}
+              </td>
+              <td colSpan="3" className="text-center">
+                IRA médio total: {totalAverage}
+              </td>
+            </tr>
           </tbody>
         </Table>
       </div>
