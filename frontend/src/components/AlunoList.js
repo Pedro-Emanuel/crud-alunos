@@ -37,7 +37,7 @@ function AlunoList({
         </thead>
         <tbody>
           {currentAlunos.map((aluno) => (
-            <tr key={aluno.id} onClick={() => handleRowClick(aluno)}>
+            <tr key={aluno.id} onClick={() => handleRowClick(aluno)} style={{cursor: 'pointer'}}>
               <td>{aluno.nome}</td>
               <td>{aluno.ira}</td>
               <td>{aluno.curso}</td>
