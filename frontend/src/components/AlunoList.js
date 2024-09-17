@@ -1,59 +1,118 @@
-// src/components/AlunoList.js
 import React, { useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Form } from 'react-bootstrap';
 import AlunoForm from './AlunoForm';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 
 function AlunoList({
-  filteredAlunos, 
+  filteredAlunos,
   searchTerm,
   setSearchTerm,
-  handleRowClick, 
-  showModal, 
-  selectedAluno, 
-  handleCloseModal, 
-  handleSaveAluno, 
-  handleDeleteAluno, 
-  handleInputChange 
+  handleRowClick,
+  showModal,
+  selectedAluno,
+  handleCloseModal,
+  handleSaveAluno,
+  handleDeleteAluno,
+  handleInputChange
 }) {
   const alunosPorPagina = 6;
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortField, setSortField] = useState('nome');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [showColors, setShowColors] = useState(false);
+
+  const handleSort = (field) => {
+    if (field === sortField) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedAlunos = [...filteredAlunos].sort((a, b) => {
+    if (a[sortField] < b[sortField]) return sortDirection === 'asc' ? -1 : 1;
+    if (a[sortField] > b[sortField]) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
 
   const indexOfLastAluno = currentPage * alunosPorPagina;
   const indexOfFirstAluno = indexOfLastAluno - alunosPorPagina;
-  const currentAlunos = filteredAlunos.slice(indexOfFirstAluno, indexOfLastAluno);
+  const currentAlunos = sortedAlunos.slice(indexOfFirstAluno, indexOfLastAluno);
+
+  const getSortIcon = (field) => {
+    if (field === sortField) {
+      return sortDirection === 'asc' ? '▲' : '▼';
+    }
+    return null;
+  };
+
+  const tableStyles = {
+    tableLayout: 'fixed',
+    width: '100%'
+  };
+
+  const columnStyles = {
+    nome: { width: '40%' },
+    ira: { width: '20%' },
+    curso: { width: '40%' }
+  };
 
   return (
     <>
       <h5 className='mb-2'>Gerencie os alunos</h5>
       <h6 className='mb-4 text-secondary'>~ Clique em uma linha para mais opções</h6>
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <Pagination 
+      <Form.Check 
+        type="checkbox" 
+        label="Habilitar cores na tabela" 
+        checked={showColors}
+        onChange={(e) => setShowColors(e.target.checked)}
+        className="mb-3"
+      />
+      <Pagination
         alunosPerPage={alunosPorPagina}
         totalAlunos={filteredAlunos.length}
         paginate={setCurrentPage}
         currentPage={currentPage}
       />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>IRA</th>
-            <th>Curso</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentAlunos.map((aluno) => (
-            <tr key={aluno.id} onClick={() => handleRowClick(aluno)} style={{cursor: 'pointer'}}>
-              <td>{aluno.nome}</td>
-              <td>{aluno.ira}</td>
-              <td>{aluno.curso}</td>
+      <div className="table-responsive">
+        <Table hover style={tableStyles}>
+          <thead>
+            <tr>
+              <th style={columnStyles.nome} onClick={() => handleSort('nome')}>
+                Nome {getSortIcon('nome')}
+              </th>
+              <th style={columnStyles.ira} onClick={() => handleSort('ira')}>
+                IRA {getSortIcon('ira')}
+              </th>
+              <th style={columnStyles.curso} onClick={() => handleSort('curso')}>
+                Curso {getSortIcon('curso')}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-      <AlunoForm 
+          </thead>
+          <tbody>
+            {currentAlunos.map((aluno) => (
+              <tr
+                className={showColors ? (
+                  aluno.ira >= 7 ? 'table-success'
+                  : aluno.ira >= 4 ? 'table-warning'
+                  : 'table-danger'
+                ) : ''}
+                key={aluno.id}
+                onClick={() => handleRowClick(aluno)}
+                style={{cursor: 'pointer'}}
+              >
+                <td style={columnStyles.nome}>{aluno.nome}</td>
+                <td style={columnStyles.ira}>{aluno.ira}</td>
+                <td style={columnStyles.curso}>{aluno.curso}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+      <AlunoForm
         show={showModal}
         aluno={selectedAluno}
         onClose={handleCloseModal}

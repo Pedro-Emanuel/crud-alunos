@@ -12,12 +12,10 @@ app.use(express.json());
 let alunos = [];
 
 // Rotas
-// Listar todos os alunos
 app.get('/api/alunos', (req, res) => {
   res.json(alunos);
 });
 
-// Criar um novo aluno
 app.post('/api/alunos', (req, res) => {
   const novoAluno = req.body;
   novoAluno.id = alunos.length + 1; // Gera um ID simples
@@ -25,7 +23,6 @@ app.post('/api/alunos', (req, res) => {
   res.status(201).json(novoAluno);
 });
 
-// Recuperar um aluno específico
 app.get('/api/alunos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const aluno = alunos.find(a => a.id === id);
@@ -36,7 +33,6 @@ app.get('/api/alunos/:id', (req, res) => {
   }
 });
 
-// Atualizar um aluno
 app.put('/api/alunos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = alunos.findIndex(a => a.id === id);
@@ -48,7 +44,6 @@ app.put('/api/alunos/:id', (req, res) => {
   }
 });
 
-// Deletar um aluno
 app.delete('/api/alunos/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = alunos.findIndex(a => a.id === id);

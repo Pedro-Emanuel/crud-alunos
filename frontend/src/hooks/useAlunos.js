@@ -1,6 +1,6 @@
 // src/hooks/useAlunos.js
 import { useState, useEffect } from 'react';
-import { fetchAlunos, updateAluno, deleteAluno } from '../services/alunoService';
+import { fetchAlunos, updateAluno, deleteAluno, adicionarAluno } from '../services/alunoService';
 
 function useAlunos() {
   const [alunos, setAlunos] = useState([]);
@@ -58,12 +58,13 @@ function useAlunos() {
     }
   };
 
-  const handleCreateAluno = async () => {
+  const handleCreateAluno = async (aluno) => {
     try {
+      await adicionarAluno(aluno);
       const updatedAlunos = await fetchAlunos();
       setAlunos(updatedAlunos);
     } catch (error) {
-      console.error('Erro ao criar aluno:', error);
+      console.error('Erro ao adicionar aluno:', error);
     }
   };
 

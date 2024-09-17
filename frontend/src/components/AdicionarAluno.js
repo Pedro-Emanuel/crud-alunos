@@ -1,7 +1,6 @@
 // src/components/AdicionarAluno.js
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { adicionarAluno } from '../services/alunoService';
 
 function AdicionarAluno({handleCreateAluno}) {
   const [aluno, setAluno] = useState({ nome: '', ira: '', curso: '' });
@@ -17,8 +16,7 @@ function AdicionarAluno({handleCreateAluno}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await adicionarAluno(aluno);
-      handleCreateAluno();
+      handleCreateAluno(aluno);
       setAlertVariant('success');
       setAlertMessage('Aluno adicionado com sucesso!');
       setShowAlert(true);
